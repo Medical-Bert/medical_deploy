@@ -5,7 +5,7 @@ import Tester from './Components/test';
 
 
 import React, { useEffect, useState } from "react";
-import { useNavigate, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { useNavigate, BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import Verification from './Components/verification';
@@ -58,7 +58,7 @@ function App() {
                 try {
                     const response = await axios.get('http://localhost:5000/profile', { withCredentials: true });
                     const { username } = response.data;
-
+                    
                     setLoggedIn(true);
                 } catch (error) {
                     console.error(error);
@@ -79,7 +79,7 @@ function App() {
                     path="/"
                     element={
                         loggedIn ? (
-                            <Tester />
+                            <Tester/>
                         ) : (
                             <Home />
                         )
