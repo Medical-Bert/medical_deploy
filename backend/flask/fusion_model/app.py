@@ -263,7 +263,7 @@ def predict():
 
 
 
-        print(dataset["test"][image_number])
+        print(dataset["test"][3432])
         
         
         # Use the extracted image number as an index in your dataset
