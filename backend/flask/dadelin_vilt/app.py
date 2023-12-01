@@ -1,42 +1,47 @@
 from PIL import Image
 from flask import Flask, request, jsonify
 import os
+import base64
+from io import BytesIO
+
 from transformers import ViltProcessor, ViltForQuestionAnswering
 
-# Prepare image + question
-processor = ViltProcessor.from_pretrained("dandelin/vilt-b32-finetuned-vqa")
-model = ViltForQuestionAnswering.from_pretrained("dandelin/vilt-b32-finetuned-vqa")
 app = Flask(__name__)
 
-# Specify the path to the uploads folder
-app.config["UPLOAD_FOLDER"] = os.path.join(os.path.dirname(__file__), 'uploads')
-os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+# Specify the folder where uploaded images will be stored
+UPLOAD_FOLDER = "uploads"
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+# Ensure the upload folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+# Load pre-trained VILT models
+processor = ViltProcessor.from_pretrained("dandelin/vilt-b32-finetuned-vqa")
+model = ViltForQuestionAnswering.from_pretrained("dandelin/vilt-b32-finetuned-vqa")
 
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
-        # Access the uploaded file from the request
-        print("im called??")
-        uploaded_file = request.files['file']
+        input_data = request.get_json()
+        question = input_data['question']
+        print(question)
+        image_data = input_data['data']
+        filename = input_data.get('name', 'default_filename.jpg')
 
-        # Check if a file was provided
-        if uploaded_file is None:
-            return jsonify({'error': 'No file provided'}), 400
+        # Ensure the image data is a bytes-like object
+        image_bytes = base64.b64decode(image_data)
 
-        # Save the uploaded file to the upload folder
-        img_path = os.path.join(app.config["UPLOAD_FOLDER"], uploaded_file.filename)
-        uploaded_file.save(img_path)
-        print("Image saved at:", img_path)
+        # Convert bytes to image
+        image = Image.open(BytesIO(image_bytes))
 
-        # Access the question from the form data
-        question = request.form['question']
-        print("Question:", question)
+        # Save the image to the upload folder with the original filename
+        filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        image.save(filename)
 
-        # Open the image
-        image = Image.open(img_path)
-
-        # Process the image and question
-        encoding = processor(image, question, return_tensors="pt")
+        # Process the image and questio
+        
+        img =Image.open(filename)
+        encoding = processor(img, question, return_tensors="pt")
 
         # Forward pass
         outputs = model(**encoding)
@@ -44,14 +49,12 @@ def predict():
         idx = logits.argmax(-1).item()
         print("Predicted answer:", model.config.id2label[idx])
         output = model.config.id2label[idx]
-
         output_data = {'prediction': output}
         return jsonify(output_data)
-
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    port = 8000  # Choose the port you want to use
+    port = 8000
     print(f"Starting the app on port {port}")
     app.run(debug=True, port=port)
