@@ -41,7 +41,7 @@ const SignUp = () => {
         // Send a request to your server to generate and send OTP
         try {
             console.log("hhhhhhhh")
-            const response = await axios.post('http://mediacal-vqa-server-api.vercel.app/genotp', {
+            const response = await axios.post('http://localhost:5000/genotp', {
                 userId: 
                 email,
             });
