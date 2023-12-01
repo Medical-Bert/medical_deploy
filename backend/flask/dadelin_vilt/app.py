@@ -16,6 +16,7 @@ os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 def predict():
     try:
         # Access the uploaded file from the request
+        print("im called??")
         uploaded_file = request.files['file']
 
         # Check if a file was provided
