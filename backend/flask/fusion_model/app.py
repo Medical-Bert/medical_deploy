@@ -242,14 +242,10 @@ def predict():
         print(question)
         image_data = input_data['data']
         filename = input_data.get('name', 'default_filename.jpg')
-
-        # Extract the number from the image name
-        match = re.search(r'image(\d+)', filename)
-        if match:
-            image_number = int(match.group(1))
-        else:
-            # Handle the case when the image name doesn't follow the expected format
-            return jsonify({'error': 'Invalid image name format'}), 400
+        
+        l1 = filename
+        actual_image=l1[:-4]
+        
 
         # Ensure the image data is a bytes-like object
         image_bytes = base64.b64decode(image_data)
@@ -259,15 +255,17 @@ def predict():
 
         # Save the image to the upload folder with the original filename
         filename = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        
+        print("the image name is: ",filename)
         image.save(filename)
 
 
 
-        print(dataset["test"][3432])
+        print(dataset["test"][3246])
         
         
         # Use the extracted image number as an index in your dataset
-        sample = loaded_collator(dataset["test"][image_number])
+        sample = loaded_collator(dataset["test"][3246])
 
         input_ids = sample["input_ids"].to(device)
         token_type_ids = sample["token_type_ids"].to(device)
