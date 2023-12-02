@@ -49,6 +49,13 @@ def process_example(example):
 dataset = dataset.map(process_example, batched=True)
 
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(device)
+
+if device.type == 'cuda':
+    print("my gpu is rtx ok??",torch.cuda.get_device_name(0))
+    
+
 @dataclass
 class MultimodalCollator:
     tokenizer: AutoTokenizer
@@ -72,7 +79,7 @@ class MultimodalCollator:
 
     def preprocess_images(self, images: List[str]):
         processed_images = self.preprocessor(
-            images=[Image.open(os.path.join("..", r"C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\model",   image_id + ".jpg")).convert('RGB') for image_id in images],
+            images=[Image.open(os.path.join("..", r"C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\train",   image_id + ".jpg")).convert('RGB') for image_id in images],
             return_tensors="pt",
         )
         return {
@@ -209,12 +216,7 @@ import torch
 import io
 
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-print(device)
 
-if device.type == 'cuda':
-    print("my gpu is rtx ok??",torch.cuda.get_device_name(0))
-    
 with open(r"C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\modelcol.pkl", 'rb') as file:
     loaded_collator, loaded_model = pickle.load(file)
     loaded_model.to(device) 
@@ -287,7 +289,9 @@ def predict():
             print("Predicted Answer:\t", YNSanswer_space[loaded_preds[i-100]])
             print("*********************************************************")
         # Return the prediction
-        output ="hello"
+        output ="zorojutroo"
+        print(output)
+        
         result = {'prediction':output}
         return jsonify(result)
 
