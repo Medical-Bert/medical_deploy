@@ -313,7 +313,7 @@ def predict():
         print("hell 6")
         print(loaded_preds)
 
-        for i in range(100):
+        for i in range(100,105):
             print("*********************************************************")
             showExample(train=False, id=i)
             print("Predicted Answer:\t", YNSanswer_space[loaded_preds[i-100]])

@@ -232,8 +232,7 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 
-
-def showExample(train=True, id=None):
+def showExample(train=True, id=None, question=None, image=None):
     if train:
         data = dataset["train"]
     else:
@@ -241,18 +240,17 @@ def showExample(train=True, id=None):
     if id is None:
         id = np.random.randint(len(data))
         
-    # image_path = os.path.join("..",r"C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\train",  data[id]["image"] + ".jpg")
-    # image = Image.open(image_path)
-    
-    
-    # if image.mode != 'RGB':
-    #     image = image.convert('RGB')
+    # Find the index of the example in the dataset based on image and question
+    index = next((i for i, item in enumerate(data) if item["image"] == image and item["question"] == question), None)
 
-    # display(image)
-
-    print("Question: \t", data[id]["question"])
-    print("Actual answer :\t\t", data[id]["answer"], "(Label: {0})".format(data[id]["label"]))
-
+    if index is not None:
+        print("Question: \t", data[index]["question"])
+        print("Actual answer:\t", data[index]["answer"], "(Label: {0})".format(data[index]["label"]))
+    else:
+        print("Example not found in the dataset.")
+        
+        
+        
 @app.route('/predict', methods=['POST'])
 def predict():
     try:
@@ -279,49 +277,49 @@ def predict():
         print("the image name is: ",filename)
         image.save(filename)
         
+        
+        
+        user_input = [
+            {'image': actual_image, 'question': question, 'answer': 'yes', 'label': 121},
+            {'image': actual_image, 'question': question, 'answer': 'yes', 'label': 143},
+            {'image': actual_image, 'question': question, 'answer': 'yes', 'label': 239},
+        ]
 
+        preps = user_input[0:2]  # Adjust the range based on how many elements you want to include
 
 
         print(dataset["test"][3246])
-        
+        # preps = dataset["test"][100:102]
 
-        
-        
         print("hell 1")
-        # Use the extracted image number as an index in your dataset
-        sample = loaded_collator(dataset["test"][100:105])
-        print("hell 2")
-        
+        samples = loaded_collator(preps)
 
-        print("hell 3")
-        
-        input_ids = sample["input_ids"].to(device)
-        token_type_ids = sample["token_type_ids"].to(device)
-        attention_mask = sample["attention_mask"].to(device)
-        
-        pixel_values = sample["pixel_values"].to(device)
-        
-        labels = sample["labels"].to(device)
-        
-        
-        
+        print("hell 2")
+
+        # Extract processed data from the collated samples
+        input_ids = samples["input_ids"].to(device)
+        token_type_ids = samples["token_type_ids"].to(device)
+        attention_mask = samples["attention_mask"].to(device)
+        pixel_values = samples["pixel_values"].to(device)
+
         print("hell 4")
-        loaded_output = loaded_model(input_ids, pixel_values, attention_mask, token_type_ids, labels)
+        loaded_output = loaded_model(input_ids, pixel_values, attention_mask, token_type_ids)
         print("hell 5")
 
         loaded_preds = loaded_output["logits"].argmax(axis=-1).cpu().numpy()
         print("hell 6")
         print(loaded_preds)
 
-        for i in range(100):
-            print("*********************************************************")
-            showExample(train=False, id=i)
-            print("Predicted Answer:\t", YNSanswer_space[loaded_preds[i-100]])
-            print("*********************************************************")
+        
+        print("*********************************************************")
+        showExample(train=False, id=0,question=question,image=actual_image)
+        
+        print("Predicted Answer:\t", YNSanswer_space[loaded_preds[0]])
+        print("*********************************************************")
             
             
         # Return the prediction
-        output ="zorojutroo"
+        output = YNSanswer_space[loaded_preds[0]]
         print(output)
         
         result = {'prediction':output}
