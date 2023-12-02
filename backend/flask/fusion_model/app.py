@@ -208,18 +208,17 @@ import pickle
 import torch
 import io
 
-class CPU_Unpickler(pickle.Unpickler):
-    def find_class(self, module, name):
-        if module == 'torch.storage' and name == '_load_from_bytes':
-            return lambda b: torch.load(io.BytesIO(b), map_location='cpu')
-        else:
-            return super().find_class(module, name)
 
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+print(device)
+
+if device.type == 'cuda':
+    print("my gpu is rtx ok??",torch.cuda.get_device_name(0))
+    
 with open(r"C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\modelcol.pkl", 'rb') as file:
-    loaded_collator, loaded_model = CPU_Unpickler(file).load()
-    loaded_model.to('cpu')  # Move the loaded model to CPU
+    loaded_collator, loaded_model = pickle.load(file)
+    loaded_model.to(device) 
 
-device = 'cpu'
 
 
 
@@ -263,21 +262,25 @@ def predict():
 
         print(dataset["test"][3246])
         
-        print("hell the rule...")
-        print("hell the rule...")
         
+        print("hell 1")
         # Use the extracted image number as an index in your dataset
         sample = loaded_collator(dataset["test"][100:105])
-        print("hell th")
+        print("hell 2")
+        
 
+        print("hell 3")
         input_ids = sample["input_ids"].to(device)
         token_type_ids = sample["token_type_ids"].to(device)
         attention_mask = sample["attention_mask"].to(device)
         pixel_values = sample["pixel_values"].to(device)
         labels = sample["labels"].to(device)
+        print("hell 4")
         loaded_output = loaded_model(input_ids, pixel_values, attention_mask, token_type_ids, labels)
+        print("hell 5")
 
         loaded_preds = loaded_output["logits"].argmax(axis=-1).cpu().numpy()
+        print("hell 6")
 
         for i in range(100, 105):
             print("*********************************************************")
