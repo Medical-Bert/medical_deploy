@@ -215,7 +215,7 @@ class CPU_Unpickler(pickle.Unpickler):
         else:
             return super().find_class(module, name)
 
-with open(r'C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\modelcol.pkl', 'rb') as file:
+with open(r"C:\Users\Vishnu\Documents\Gitprojects\ps\pathvqa\modelcol.pkl", 'rb') as file:
     loaded_collator, loaded_model = CPU_Unpickler(file).load()
     loaded_model.to('cpu')  # Move the loaded model to CPU
 
@@ -263,21 +263,29 @@ def predict():
 
         print(dataset["test"][3246])
         
+        print("hell the rule...")
+        print("hell the rule...")
         
         # Use the extracted image number as an index in your dataset
-        sample = loaded_collator(dataset["test"][3246])
+        sample = loaded_collator(dataset["test"][100:105])
+        print("hell th")
 
         input_ids = sample["input_ids"].to(device)
         token_type_ids = sample["token_type_ids"].to(device)
         attention_mask = sample["attention_mask"].to(device)
         pixel_values = sample["pixel_values"].to(device)
         labels = sample["labels"].to(device)
-
         loaded_output = loaded_model(input_ids, pixel_values, attention_mask, token_type_ids, labels)
+
         loaded_preds = loaded_output["logits"].argmax(axis=-1).cpu().numpy()
 
+        for i in range(100, 105):
+            print("*********************************************************")
+            print("Predicted Answer:\t", YNSanswer_space[loaded_preds[i-100]])
+            print("*********************************************************")
         # Return the prediction
-        result = {'prediction': YNSanswer_space[loaded_preds[0]]}
+        output ="hello"
+        result = {'prediction':output}
         return jsonify(result)
 
     except Exception as e:
