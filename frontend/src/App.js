@@ -57,7 +57,7 @@ function App() {
         if (Cookies.get('jwt')) {
             const checkAuthenticationStatus = async () => {
                 try {
-                    const response = await axios.get(`https://medical-deploy.vercel.app/profile`, { withCredentials: true });
+                    const response = await axios.get("https://medical-deploy-server.vercel.app/profile", { withCredentials: true });
                     const { username } = response.data;
                     
                     setLoggedIn(true);
