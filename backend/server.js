@@ -10,7 +10,7 @@ const app = express();
 app.use(cookieParser());
 
 // Allow requests from both http://localhost:3000 and https://medical-deploy.vercel.app/
-const allowedOrigins = ['http://localhost:3000', 'https://medical-deploy.vercel.app/'];
+const allowedOrigins = ['https://medical-deploy.vercel.app/'];
 
 app.use(cors({
     credentials: true,
