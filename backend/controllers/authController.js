@@ -12,39 +12,6 @@ const maxAge = 3 * 24 * 60 * 60 * 1000;
 
 var otp1 = 1;
 
-const multer = require('multer');
-const { application } = require('express');
-
-
-
-var storage = multer.diskStorage({
-    destination: "./uploads",
-    filename: function (req, file, cb) {
-        cb(null, file.originalname); // Save file with its original name
-    }
-});
-
-var upload = multer({ storage: storage }).array('file');
-
-
-const imgupload = (req, res) => {
-    upload(req, res, function (err) {
-        if (err instanceof multer.MulterError) {
-            return res.status(500).json(err);
-        } else if (err) {
-            return res.status(500).json(err);
-        }
-
-        // Assuming you want to send the file details in the response
-        const fileDetails = req.files.map(file => ({
-            originalname: file.originalname,
-            filename: file.filename,
-            path: file.path
-        }));
-
-        res.status(200).json({ files: fileDetails });
-    });
-};
 
 
 
@@ -272,6 +239,5 @@ module.exports = {
     login,
     getProfile,
     getotp,
-    modeloutput,
-    imgupload
+    modeloutput
 };
