@@ -6,10 +6,21 @@ const authRoutes = require('./routes/authRoutes');
 
 dotenv.config({ path: './.env' });
 
+
+
+
+
+
+
 const app = express();
 app.use(cookieParser());
 
 // Allow requests from both http://localhost:3000 and https://medical-deploy.vercel.app/
+app.get('*', (req, res, next) => {
+    res.status(200).json({
+        message: 'bad request'
+    })
+})
 const allowedOrigins = ['https://medical-deploy-frontend.vercel.app/'];
 
 app.use(cors({
