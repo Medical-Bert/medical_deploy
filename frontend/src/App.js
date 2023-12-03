@@ -74,7 +74,7 @@ function App() {
 
 
     return (
-        <Router>
+        <Router basename='/'>
             <Routes>
                 <Route
                     path="/"
