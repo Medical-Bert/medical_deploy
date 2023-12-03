@@ -16,10 +16,12 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
+const corsOptions = require('./config/corsOptions'); // Assuming you have this file
 
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 app.use('/', authRoutes);
+
 
 const mongoose = require('mongoose');
 
