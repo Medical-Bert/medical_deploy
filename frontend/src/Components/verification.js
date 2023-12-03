@@ -21,7 +21,7 @@ const Verification = () => {
 
     const fetchOTP = async () => {
         try {
-            const response = await axios.get('http://localhost:5000/getotp', {});
+            const response = await axios.get('https://medicalbert-api.onrender.com/getotp', {});
             setGeneratedOTP(response.data.otp);
         } catch (error) {
             console.error('Error getting OTP:', error);
@@ -80,7 +80,7 @@ const Verification = () => {
         // Send a request to your server to generate and send OTP
         try {
             console.log("hhhhhhhh")
-            const response = await axios.post('http://localhost:5000/genotp', {
+            const response = await axios.post('https://medicalbert-api.onrender.com/genotp', {
                 userId: 
                 email,
             });
@@ -122,7 +122,7 @@ const Verification = () => {
             if (generatedOTP !== null) {
                 if (otp === generatedOTP) {
                     axios
-                        .post('http://localhost:5000/signup', { uname: username, mail: email, key: password })
+                        .post('https://medicalbert-api.onrender.com/signup', { uname: username, mail: email, key: password })
                         .then((response) => {
                             console.log('Saved item:', response.data);
                         })

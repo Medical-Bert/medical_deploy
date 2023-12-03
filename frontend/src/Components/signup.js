@@ -41,7 +41,7 @@ const SignUp = () => {
         // Send a request to your server to generate and send OTP
         try {
             console.log("hhhhhhhh")
-            const response = await axios.post('http://localhost:5000/genotp', {
+            const response = await axios.post('https://medicalbert-api.onrender.com/genotp', {
                 userId: 
                 email,
             });
