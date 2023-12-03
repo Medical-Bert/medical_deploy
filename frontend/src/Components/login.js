@@ -17,7 +17,7 @@ const LoginPage = () => {
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.get('http://medical-deploy.vercel.app/login', {
+            const response = await axios.get('https://medical-deploy.vercel.app/login', {
                 params: {
                     identifier: identifier,
                     password: password
@@ -27,7 +27,7 @@ const LoginPage = () => {
     
             if (response.data.status === 'success') {
                 // Handle successful login
-                axios.get('http://localhost:5000/profile', { withCredentials: true })
+                axios.get('https://medical-deploy.vercel.app/profile', { withCredentials: true })
                     .then((response) => {
                         const { username } = response.data;
                     })
