@@ -22,7 +22,7 @@ app.use(cors());
 app.use('/', authRoutes);
 
 const mongoose = require('mongoose');
-mongoose.connect(process.env.REACT_APP_Mongolink, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb+srv://vishnudath710:vishnudath@patch-management.0uewar4.mongodb.net/medicalvqa", { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
         console.log('Connected to MongoDB');
     })
@@ -35,6 +35,19 @@ app.get('*', (req, res, next) => {
         message: 'bad request'
     })
 })
+// mongoose.connect(process.env.REACT_APP_Mongolink, { useNewUrlParser: true, useUnifiedTopology: true })
+//     .then(() => {
+//         console.log('Connected to MongoDB');
+//     })
+//     .catch((error) => {
+//         console.error('Error connecting to MongoDB:', error);
+//     });
+
+// app.get('*', (req, res, next) => {
+//     res.status(200).json({
+//         message: 'bad request'
+//     })
+// })
 
     
 
