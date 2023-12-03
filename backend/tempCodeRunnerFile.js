@@ -1,0 +1,1 @@
+server.listen(port,()=>{console.log('this app is running on '+port)});
