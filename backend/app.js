@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
-const authRoutes = require('./api/routes/authRoutes');
+const authRoutes = require('./authRoutes');
 const bodyParser = require('body-parser');
 
 
