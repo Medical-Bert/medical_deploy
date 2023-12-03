@@ -129,6 +129,9 @@ const login = async (req, res) => {
             ],
         });
 
+        res.header('Access-Control-Allow-Origin', 'https://medical-deploy-frontend.vercel.app');
+        res.header('Access-Control-Allow-Credentials', true);
+
         if (user) {
             bcrypt.compare(password, user.password, function (err, result) {
                 if (result === true) {
