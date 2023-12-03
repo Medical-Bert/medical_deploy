@@ -9,7 +9,7 @@
       {
         "src": "/api/(.*)",
         "dest": "server.js"
-      },
+      }
 
     ]
 }
