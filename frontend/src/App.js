@@ -12,6 +12,7 @@ import Verification from './Components/verification';
 
 function Home() {
     const navigate = useNavigate();
+    axios.defaults.withCredentials=true;
 
 
     return (
@@ -56,7 +57,7 @@ function App() {
         if (Cookies.get('jwt')) {
             const checkAuthenticationStatus = async () => {
                 try {
-                    const response = await axios.get('http://localhost:5000/profile', { withCredentials: true });
+                    const response = await axios.get('https://medical-deploy.vercel.app/profile', { withCredentials: true });
                     const { username } = response.data;
                     
                     setLoggedIn(true);
