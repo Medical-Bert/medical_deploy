@@ -19,6 +19,12 @@ router.post('/imgupload', authController.imgupload);
 // Add the new route for getans
 router.post('/modeloutput', authController.modeloutput);
 
+router.get('*', (req, res, next) => {
+    res.status(200).json({
+        message: 'bad request'
+    })
+})
+
 
 
 
