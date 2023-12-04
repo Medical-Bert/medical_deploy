@@ -28,13 +28,7 @@ const Tester = () => {
 
     const handleLogoutClick = () => {
         // Your existing logout logic
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            const cookieName = cookie.split('=')[0];
-            document.cookie = `${cookieName}=; Max-Age=-1; path=/;`;
-        }
-
+        localStorage.removeItem('jwt');
         navigate('/login');
 
         toast.success('Logout Successful', {

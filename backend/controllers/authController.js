@@ -84,6 +84,12 @@ const signup = async (req, res) => {
     }
 };
 
+
+
+function setTokenInLocalStorage(token) {
+    localStorage.setItem('jwt', token);
+}
+
 const login = async (req, res) => {
     console.log('Received login request:', req.query);
     const { identifier, password } = req.query;
@@ -101,15 +107,8 @@ const login = async (req, res) => {
                 if (result === true) {
                     const token = generateToken(user);
 
-                    res.cookie("jwt", token, {
-                        withCredentials: true,
-                        httpOnly: true,
-                        maxAge: maxAge,
-                        sameSite: 'None',
-                        secure: true,
-                        path: "/",
-                        domain: '.onrender.com',
-                    });
+                    setTokenInLocalStorage(token);
+
                     res.json({ status: 'success', token, created: true, user: user.username });
                 } else {
                     console.log("wrong pasword........")
@@ -126,8 +125,11 @@ const login = async (req, res) => {
     }
 };
 
+
+
 const getProfile = (req, res) => {
-    const token = req.cookies.jwt;
+    // Read the token from local storage
+    const token = localStorage.getItem('jwt');
     console.log(token)
     if (token) {
         try {
@@ -138,10 +140,9 @@ const getProfile = (req, res) => {
             res.sendStatus(401); // Invalid token
         }
     } else {
-        res.sendStatus(401); // No token found
+        res.sendStatus(401); // No token found in local storage
     }
 };
-
 
 
 
@@ -181,12 +182,12 @@ const fs = require('fs').promises; // Using fs.promises for asynchronous file op
 //         });
 
 //         console.log('Predicted value:', response.data.prediction);
-        
+
 //         // Send the prediction as JSON in the HTTP response
 //         res.json(response.data);
 //     } catch (error) {
 //         console.error('Error:', error.message);
-        
+
 //         // Send a 500 Internal Server Error response with the error message
 //         res.status(500).json({ error: error.message });
 //     }
@@ -224,12 +225,12 @@ const modeloutput = async (req, res) => {
         });
 
         console.log('Predicted value:', response.data.prediction);
-        
+
         // Send the prediction as JSON in the HTTP response
         res.json(response.data);
     } catch (error) {
         console.error('Error:', error.message);
-        
+
         // Send a 500 Internal Server Error response with the error message
         res.status(500).json({ error: error.message });
     }
