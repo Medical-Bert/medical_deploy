@@ -5,14 +5,14 @@ import Tester from './Components/test';
 
 
 import React, { useEffect, useState } from "react";
-import { useNavigate, BrowserRouter as Router, Routes, Route  } from 'react-router-dom';
+import { useNavigate, BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import axios from "axios";
 import Cookies from 'js-cookie';
 import Verification from './Components/verification';
 
 function Home() {
     const navigate = useNavigate();
-    axios.defaults.withCredentials=true;
+    axios.defaults.withCredentials = true;
 
 
     return (
@@ -53,36 +53,38 @@ function Home() {
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
 
-    const [token, setToken] = useState(""); // Added token state
+
 
     useEffect(() => {
-        const tokenval = localStorage.getItem('jwt');
 
-        if (tokenval) setToken(tokenval);
 
-        if (tokenval) {
-            const checkAuthenticationStatus = async () => {
-                try {
-                    const response = await axios.post(
-                        "https://medicalbert-api.onrender.com/profile",
-                        {
-                            jwttoken: tokenval
+        const getProfileData = async () => {
+            try {
+                const tokenval = localStorage.getItem('jwt');
+                console.log('Token is as follows:', tokenval);
+                if (tokenval) {
+
+                    const response = await axios.post("https://medicalbert-api.onrender.com/profile", null, {
+                        headers: {
+                            Authorization: `Bearer ${tokenval}`,
                         },
-                        {
-                            withCredentials: true
-                        }
-                    );
-                    const { username } = response.data;
+                        withCredentials: true,
+                    });
 
-                    setLoggedIn(true);
-                } catch (error) {
-                    console.error(error);
-                } finally {
-                    console.log("hello ");
+                    console.log('Profile Data:', response.data);
+
+                    navigate(`/test`);
                 }
-            };
-            checkAuthenticationStatus();
-        }
+                else {
+                    console.log("no jwt token or no login data before")
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        getProfileData();
+
     }, []);
 
 
@@ -94,7 +96,7 @@ function App() {
                     path="/"
                     element={
                         loggedIn ? (
-                            <Tester/>
+                            <Tester />
                         ) : (
                             <Home />
                         )
