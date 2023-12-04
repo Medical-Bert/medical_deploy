@@ -7,16 +7,22 @@ const bodyParser = require('body-parser');
 
 
 
-dotenv.config({ path: './.env' });  
+dotenv.config({ path: './.env' });
 
 
 const app = express();
 app.use(cookieParser());
+app.use(cors());
 
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const corsOptions = require('./config/corsOptions'); // Assuming you have this file
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'https://medicalbert.onrender.com');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    next();
+});
 
 app.use(express.json());
 app.use(cors(corsOptions));
@@ -47,6 +53,6 @@ app.get('*', (req, res, next) => {
     })
 })
 
-    
+
 
 module.exports = app;
