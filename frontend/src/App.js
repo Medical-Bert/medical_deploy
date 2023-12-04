@@ -70,10 +70,8 @@ function App() {
                         },
                         withCredentials: true,
                     });
-
+                    setLoggedIn(true)
                     console.log('Profile Data:', response.data);
-
-                    navigate(`/test`);
                 }
                 else {
                     console.log("no jwt token or no login data before")
