@@ -27,16 +27,29 @@ const LoginPage = () => {
     
             if (response.data.status === 'success') {
                 // Handle successful login
+
+
+                const { token, user } = response.data;
+
+                // Log the token to the console
+                console.log('Token is:', token);
+                console.log('user is:', user);
+                localStorage.setItem('jwt', token);
+
+
                 axios.get("https://medicalbert-api.onrender.com/profile", { withCredentials: true })
                     .then((response) => {
                         const { username } = response.data;
+                        const { token, user } = response.data;
+        
+                        // Log the token to the console
+                        console.log('Token:', token);
+                        navigate(`/test`);
                     })
                     .catch((error) => {
                         console.error(error);
                     });
     
-                const { token, user } = response.data;
-                navigate(`/test`);
                 
             } else {
               

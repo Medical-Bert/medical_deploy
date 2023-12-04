@@ -86,9 +86,6 @@ const signup = async (req, res) => {
 
 
 
-function setTokenInLocalStorage(token) {
-    localStorage.setItem('jwt', token);
-}
 
 const login = async (req, res) => {
     console.log('Received login request:', req.query);
@@ -107,7 +104,6 @@ const login = async (req, res) => {
                 if (result === true) {
                     const token = generateToken(user);
 
-                    setTokenInLocalStorage(token);
 
                     res.json({ status: 'success', token, created: true, user: user.username });
                 } else {
