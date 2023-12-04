@@ -24,7 +24,7 @@ const LoginPage = () => {
                 },
                 withCredentials: true
             });
-    
+
             if (response.data.status === 'success') {
                 // Handle successful login
 
@@ -37,30 +37,32 @@ const LoginPage = () => {
                 localStorage.setItem('jwt', token);
 
 
-                axios.post("https://medicalbert-api.onrender.com/profile", { 
-                    params:{
-                        jwttoken:token
+                axios.post("https://medicalbert-api.onrender.com/profile", {
+                    params: {
+                        jwttoken: token
                     },
-                    withCredentials: true })
+                    withCredentials: true
+                })
                     .then((response) => {
                         // Log the token to the console
                         console.log('Token:', token);
                         navigate(`/test`);
                     })
                     .catch((error) => {
+                        console.log("gaya")
                         console.error(error);
                     });
-    
-                
+
+
             } else {
-              
+
             }
         } catch (error) {
             console.error(error);
-           
+
             console.log(error.response.data.error)
-             // Handle specific error messages
-             if (error.response.data.error === 'UserNotFound') {
+            // Handle specific error messages
+            if (error.response.data.error === 'UserNotFound') {
                 toast.error('User not found', {
                     position: 'bottom-right',
                     autoClose: 1400,
@@ -97,7 +99,7 @@ const LoginPage = () => {
             }
         }
     };
-    
+
     return (
         <div className="modal modal-signin position-static d-block py-2" tabIndex="-1" role="dialog" id="modalSignin">
             <ToastContainer

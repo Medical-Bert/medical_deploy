@@ -106,6 +106,7 @@ const login = async (req, res) => {
 
 
                     res.json({ status: 'success', token, created: true, user: user.username });
+                    console.log("login suceessful..")
                 } else {
                     console.log("wrong pasword........")
                     res.status(401).json({ error: 'IncorrectPassword', message: 'Incorrect password' });
@@ -126,16 +127,19 @@ const login = async (req, res) => {
 const getProfile = (req, res) => {
     // Read the token from local storage
     const { jwttoken } = req.query;
-    console.log(jwttoken)
+    console.log("token verification in progress")
+    console.log("token is",jwttoken)
     if (jwttoken) {
         try {
             const decoded = jwt.verify(jwttoken, 'secret_key is blash');
             const { username } = decoded;
             res.json({ username });
         } catch (err) {
+            console.log("dealer")
             res.sendStatus(401); // Invalid token
         }
     } else {
+        console.log("no token provided")
         res.sendStatus(401); // No token found in local storage
     }
 };
