@@ -12,7 +12,16 @@ dotenv.config({ path: './.env' });
 
 const app = express();
 app.use(cookieParser());
-app.use(cors());
+
+
+const corsOptions = {
+    origin: 'https://medicalbert.onrender.com',
+    methods: 'GET, POST, PUT, DELETE',
+    credentials: true,  // Add this line to allow credentials
+    allowedHeaders: 'Content-Type, Authorization',
+};
+
+app.use(cors(corsOptions));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
