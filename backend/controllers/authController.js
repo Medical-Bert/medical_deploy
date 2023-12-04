@@ -103,8 +103,9 @@ const login = async (req, res) => {
 
                     res.cookie("jwt", token, {
                         withCredentials: true,
-                        httpOnly: false,
+                        httpOnly: true,
                         maxAge: maxAge,
+                        secure: true,
                     });
                     res.json({ status: 'success', token, created: true, user: user.username });
                 } else {
