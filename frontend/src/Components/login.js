@@ -14,6 +14,26 @@ const LoginPage = () => {
         setPasswordVisible(!passwordVisible);
     };
 
+
+
+    const getProfileData = async (token) => {
+        try {
+            const response = await axios.post("https://medicalbert-api.onrender.com/profile", {
+                params: {
+                    jwttoken: token
+                },
+                withCredentials: true
+            });
+
+            console.log('Profile Data:', response.data);
+
+            navigate(`/test`);
+        } catch (error) {
+            console.error(error);
+
+        }
+    };
+
     const handleFormSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -34,28 +54,13 @@ const LoginPage = () => {
                 // Log the token to the console
                 console.log('Token is:', token);
                 console.log('user is:', user);
+                setToken(token)
                 localStorage.setItem('jwt', token);
 
-
-                axios.post("https://medicalbert-api.onrender.com/profile", {
-                    params: {
-                        jwttoken: token
-                    },
-                    withCredentials: true
-                })
-                    .then((response) => {
-                        // Log the token to the console
-                        console.log('Token:', token);
-                        navigate(`/test`);
-                    })
-                    .catch((error) => {
-                        console.log("gaya")
-                        console.error(error);
-                    });
-
+                await getProfileData(token);
 
             } else {
-
+                console.log("watchout")
             }
         } catch (error) {
             console.error(error);
