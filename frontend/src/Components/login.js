@@ -20,23 +20,22 @@ const LoginPage = () => {
     const getProfileData = async () => {
         try {
             const tokenval = localStorage.getItem('jwt');
-            console.log('token is as follows:', token);
-            console.log('token is as following:', tokenval);
-            const response = await axios.post("https://medicalbert-api.onrender.com/profile", {
-                params: {
-                    jwttoken: tokenval
+            console.log('Token is as follows:', tokenval);
+            const response = await axios.post("https://medicalbert-api.onrender.com/profile", null, {
+                headers: {
+                    Authorization: `Bearer ${tokenval}`,
                 },
-                withCredentials: true
+                withCredentials: true,
             });
-
+    
             console.log('Profile Data:', response.data);
-
+    
             navigate(`/test`);
         } catch (error) {
             console.error(error);
-
         }
     };
+    
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
