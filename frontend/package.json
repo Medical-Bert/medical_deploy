@@ -1,6 +1,6 @@
 {
   "name": "frontend",
-  "homepage": "https://medical-deploy-frontend.vercel.app",
+  "proxy":"https://medicalbert-api.onrender.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -9,6 +9,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.6.2",
+    "cors": "^2.8.5",
     "js-cookie": "^3.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
