@@ -100,7 +100,7 @@ const Tester = () => {
     
         const formData = new FormData();
         formData.append('question', question);
-        // formData.append('flaskurl', flaskurl);
+        formData.append('flaskurl', flaskurl);
         formData.append('file', imgFile);
         console.log(imgFile.name);
     
