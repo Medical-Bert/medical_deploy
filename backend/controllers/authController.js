@@ -105,7 +105,10 @@ const login = async (req, res) => {
                         withCredentials: true,
                         httpOnly: true,
                         maxAge: maxAge,
+                        sameSite: 'None',
                         secure: true,
+                        path: "/",
+                        domain: '.onrender.com',
                     });
                     res.json({ status: 'success', token, created: true, user: user.username });
                 } else {
