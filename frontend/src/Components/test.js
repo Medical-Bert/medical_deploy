@@ -19,9 +19,9 @@ const Tester = () => {
     const [imgpath, setImgpath] = useState(null);
     const [value, setValue] = useState("");
     const textAreaRef = useRef(null);
-    
 
-    const [imgFile, setImgFile] = useState(null); 
+
+    const [imgFile, setImgFile] = useState(null);
 
 
 
@@ -45,18 +45,21 @@ const Tester = () => {
 
 
 
+
+    
+
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
-    
+
         if (file) {
             try {
                 const formData = new FormData();
                 formData.append('file', file);
                 setImgFile(file)
-    
+
                 setUploadedImage(URL.createObjectURL(file));
                 setImgpath(file.name);
-    
+
                 toast.success('Image uploaded successfully', {
                     position: 'bottom-right',
                     autoClose: 1400,
@@ -69,7 +72,7 @@ const Tester = () => {
                 });
             } catch (error) {
                 console.error('Error uploading image:', error);
-    
+
                 toast.error('Failed to upload image', {
                     position: 'bottom-right',
                     autoClose: 1400,
@@ -83,27 +86,27 @@ const Tester = () => {
             }
         }
     };
-    
+
 
 
 
     const [qandaContent, setQandaContent] = useState([]);
 
- 
-                       
-    
+
+
+
 
     const getans = async () => {
         const question = value;
         console.log(value);
         const flaskurl = process.env.REACT_APP_flaskurl;
-    
+
         const formData = new FormData();
         formData.append('question', question);
         formData.append('flaskurl', flaskurl);
         formData.append('file', imgFile);
         console.log(imgFile.name);
-    
+
         try {
             const response = await axios.post('https://medicalbert-api.onrender.com/modeloutput', formData, {
                 withCredentials: true,
@@ -111,16 +114,16 @@ const Tester = () => {
                     'Content-Type': 'multipart/form-data', // Important for file uploads
                 },
             });
-    
+
             // Log the predicted value from the Flask app
             console.log('predicted value', response.data);
-    
+
             // Assuming you want to store the predicted value in 'pAnswer'
             const pAnswer = response.data.prediction;
-    
+
             // Continue with any additional logic using pAnswer
             console.log('Final method:', pAnswer);
-    
+
             const newContent = [
                 <>
                     <div key={question} style={{ backgroundColor: '#000000', padding: '8px' }}>
@@ -134,12 +137,12 @@ const Tester = () => {
                     <br />
                 </>
             ];
-    
+
             setQandaContent((prevContent) => [...prevContent, ...newContent]);
-    
+
             // Clear the input field
             setValue('');
-    
+
             // You can also scroll the "qanda" div to the bottom to show the latest Q&A
             const qandaDiv = document.getElementById('qanda');
             qandaDiv.scrollTop = qandaDiv.scrollHeight;
@@ -149,7 +152,7 @@ const Tester = () => {
             console.log('Error:', error.message);
         }
     };
-    
+
 
     const handleChange = (e) => {
         setValue(e.target.value);
@@ -157,9 +160,16 @@ const Tester = () => {
 
 
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        getans();
+    };
+
+
+
     return (
         <div className="container-fluid">
-             <ToastContainer
+            <ToastContainer
                 position="bottom-right"
                 autoClose={800}
                 hideProgressBar={false}
@@ -177,7 +187,7 @@ const Tester = () => {
                         <br />
                         <strong>Medical Image </strong>
 
-                        
+
                         <p>Visual Question Answering</p>
                     </div>
                     <div className="mb-auto p-2">
@@ -204,7 +214,6 @@ const Tester = () => {
                             {!uploadedImage && (
                                 <div className='dottedborder'>
                                     <input type="file" id="userimage" onChange={handleImageUpload} />
-                                    {uploadedImage}
                                 </div>
                             )}
                             {uploadedImage && (
@@ -216,7 +225,7 @@ const Tester = () => {
                                     />
                                     <p>{uploadedImage}</p>
 
-                                    <button className='btn btn-warning my-2 mx-3'>new</button>
+                                    <button className='btn btn-danger my-2 mx-3'  onChange={()=>{setUploadedImage(null)}}>clear</button>
                                 </div>
                             )}
                         </div>
@@ -224,20 +233,23 @@ const Tester = () => {
                             {qandaContent}
                         </div>
                     </div>
-
-                    <div className='p-3'>
-                        <div className=' d-flex text-inline'>
-                            <textarea
-                                onChange={handleChange}
-                                placeholder="Ask any question related to the image:"
-                                ref={textAreaRef}
-                                rows={4}
-                                value={value}
-                                style={{ maxHeight: '150px', overflowY: 'auto' }}
-                            />
-                            <button className='btn btn-primary mx-2 btn-lg' onClick={() => { getans() }}>submit</button>
+                    {uploadedImage && (
+                        <div className='p-3'>
+                            <form onSubmit={handleSubmit}>
+                                <div className='d-flex text-inline'>
+                                    <textarea
+                                        onChange={handleChange}
+                                        placeholder="Ask any question related to the image:"
+                                        ref={textAreaRef}
+                                        rows={4}
+                                        value={value}
+                                        style={{ maxHeight: '150px', overflowY: 'auto' }}
+                                    />
+                                    <button type='submit' className='btn btn-primary mx-2 btn-lg'>submit</button>
+                                </div>
+                            </form>
                         </div>
-                    </div>
+                    )}
                 </div>
             </div>
         </div>
