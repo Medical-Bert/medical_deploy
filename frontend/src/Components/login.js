@@ -37,11 +37,12 @@ const LoginPage = () => {
                 localStorage.setItem('jwt', token);
 
 
-                axios.get("https://medicalbert-api.onrender.com/profile", { withCredentials: true })
+                axios.post("https://medicalbert-api.onrender.com/profile", { 
+                    params:{
+                        jwttoken:token
+                    },
+                    withCredentials: true })
                     .then((response) => {
-                        const { username } = response.data;
-                        const { token, user } = response.data;
-        
                         // Log the token to the console
                         console.log('Token:', token);
                         navigate(`/test`);

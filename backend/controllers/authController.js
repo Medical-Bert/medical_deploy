@@ -125,11 +125,11 @@ const login = async (req, res) => {
 
 const getProfile = (req, res) => {
     // Read the token from local storage
-    const token = localStorage.getItem('jwt');
-    console.log(token)
-    if (token) {
+    const { jwttoken } = req.query;
+    console.log(jwttoken)
+    if (jwttoken) {
         try {
-            const decoded = jwt.verify(token, 'secret_key is blash');
+            const decoded = jwt.verify(jwttoken, 'secret_key is blash');
             const { username } = decoded;
             res.json({ username });
         } catch (err) {

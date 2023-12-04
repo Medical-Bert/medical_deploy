@@ -12,7 +12,7 @@ router.use(formMiddleware);
 router.post('/genotp', authController.genotp);
 router.post('/signup', authController.signup);
 router.get('/login', authController.login);
-router.get('/profile', authController.getProfile);
+router.post('/profile', authController.getProfile);
 router.get('/getotp', authController.getotp);
 
 // Add the new route for getans

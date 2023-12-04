@@ -53,18 +53,32 @@ function Home() {
 function App() {
     const [loggedIn, setLoggedIn] = useState(false);
 
+    const [token, setToken] = useState(""); // Added token state
+
     useEffect(() => {
-        if (Cookies.get('jwt')) {
+        const tokenval = localStorage.getItem('jwt');
+
+        if (tokenval) setToken(tokenval);
+
+        if (tokenval) {
             const checkAuthenticationStatus = async () => {
                 try {
-                    const response = await axios.get("https://medicalbert-api.onrender.com/profile", { withCredentials: true });
+                    const response = await axios.post(
+                        "https://medicalbert-api.onrender.com/profile",
+                        {
+                            jwttoken: tokenval
+                        },
+                        {
+                            withCredentials: true
+                        }
+                    );
                     const { username } = response.data;
-                    
+
                     setLoggedIn(true);
                 } catch (error) {
                     console.error(error);
                 } finally {
-                    console.log("hello ")
+                    console.log("hello ");
                 }
             };
             checkAuthenticationStatus();
