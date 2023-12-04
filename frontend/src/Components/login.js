@@ -54,7 +54,7 @@ const LoginPage = () => {
                 // Log the token to the console
                 console.log('Token is:', token);
                 console.log('user is:', user);
-                setToken(token)
+                // setToken(token)
                 localStorage.setItem('jwt', token);
 
                 await getProfileData(token);
