@@ -19,6 +19,7 @@ const LoginPage = () => {
 
     const getProfileData = async () => {
         try {
+            console.log('token is as follows:', token);
             const response = await axios.post("https://medicalbert-api.onrender.com/profile", {
                 params: {
                     jwttoken: token
