@@ -160,6 +160,12 @@ const Tester = () => {
 
 
 
+    const handleClearImage = () => {
+        setUploadedImage(null);
+        setImgFile(null);
+        // Add any other logic you want to perform when clearing the image
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
         getans();
@@ -214,6 +220,7 @@ const Tester = () => {
                             {!uploadedImage && (
                                 <div className='dottedborder'>
                                     <input type="file" id="userimage" onChange={handleImageUpload} />
+                                    <p>upload here</p>
                                 </div>
                             )}
                             {uploadedImage && (
@@ -223,15 +230,17 @@ const Tester = () => {
                                         alt="Uploaded Image"
                                         className="hieght-and-width mx-2"
                                     />
-                                    <p>{uploadedImage}</p>
+                                    
 
-                                    <button className='btn btn-danger my-2 mx-3'  onChange={()=>{setUploadedImage(null)}}>clear</button>
+                                    <button className='btn btn-danger my-2 mx-3'  onClick={handleClearImage}>clear</button>
                                 </div>
                             )}
                         </div>
-                        <div className="col-6 scrollable-div my-3 bordered-primary" id="qanda">
-                            {qandaContent}
-                        </div>
+                        {uploadedImage && (
+                            <div className="col-6 scrollable-div my-3 bordered-primary" id="qanda">
+                                {qandaContent}
+                            </div>
+                        )}
                     </div>
                     {uploadedImage && (
                         <div className='p-3'>
