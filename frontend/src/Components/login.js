@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const LoginPage = () => {
     const [identifier, setIdentifier] = useState('');
     const [password, setPassword] = useState('');
+    const [token, setToken] = useState('');
     const [passwordVisible, setPasswordVisible] = useState(false);
     const navigate = useNavigate();
 
@@ -16,7 +17,7 @@ const LoginPage = () => {
 
 
 
-    const getProfileData = async (token) => {
+    const getProfileData = async () => {
         try {
             const response = await axios.post("https://medicalbert-api.onrender.com/profile", {
                 params: {
@@ -54,10 +55,10 @@ const LoginPage = () => {
                 // Log the token to the console
                 console.log('Token is:', token);
                 console.log('user is:', user);
-                // setToken(token)
+                setToken(token)
                 localStorage.setItem('jwt', token);
 
-                await getProfileData(token);
+                await getProfileData();
 
             } else {
                 console.log("watchout")
