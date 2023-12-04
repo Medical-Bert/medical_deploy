@@ -1,8 +1,9 @@
-const allowedOrigins = require('./allowedOrigins');
+const allowedOrigins = 'https://medicalbert.onrender.com';
 
 const corsOptions = {
     origin: (origin, callback) => {
-        if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+        console.log('Incoming Origin:', origin); // Log the incoming origin for debugging
+        if (allowedOrigins === origin || !origin) {
             callback(null, true);
         } else {
             callback(new Error("You are banned by CORS"));
