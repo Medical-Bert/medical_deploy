@@ -64,7 +64,6 @@ const Tester = () => {
                 const formData = new FormData();
                 formData.append('file', file);
                 setImgFile(file)
-                setImageName(file.name);
 
                 setUploadedImage(URL.createObjectURL(file));
                 setImgpath(file.name);
