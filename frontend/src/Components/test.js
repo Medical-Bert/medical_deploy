@@ -172,7 +172,7 @@ const Tester = () => {
         e.preventDefault();
         getans();
     };
-
+    const [modalContent, setModalContent] = useState([]);
     const fetchQuestions = async () => {
         if (!imageName) {
             return;
