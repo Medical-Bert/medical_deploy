@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './test.css';
-
+import jsonData from '../data/total.json';
 
 
 import axios from 'axios'
@@ -61,6 +61,22 @@ const Tester = () => {
 
                 setUploadedImage(URL.createObjectURL(file));
                 setImgpath(file.name);
+
+
+                const matchingRows = data.filter((row) => row.image === imageName);
+
+                // Generate modal content or show a message
+                const modalContent = matchingRows.length > 0
+                    ? matchingRows.map((row, index) => (
+                        <tr key={index}>
+                            <td>{row.image}</td>
+                            <td>{row.question}</td>
+                            <td>{row.answer}</td>
+                        </tr>
+                    ))
+                    : <tr><td colSpan="3">No suggestions available for this image.</td></tr>;
+
+                setModalContent(modalContent);
 
                 toast.success('Image uploaded successfully', {
                     position: 'bottom-right',
@@ -173,67 +189,59 @@ const Tester = () => {
         getans();
     };
     const [modalContent, setModalContent] = useState([]);
-    const fetchQuestions = async () => {
-        if (!imageName) {
-            return;
-        }
+    const [data, setData] = useState([]);
 
-        const csvFilePath = '../data/total.csv'; 
+    useEffect(() => {
+        setData(jsonData.table.rows);
+    }, []);
 
-        try {
-            // Fetch the CSV file
-            const response = await axios.get(csvFilePath);
-            const csvData = response.data;
+    // const fetchQuestions = () => {
+    //     if (!imageName) {
+    //         return;
+    //     }
 
-            // Parse CSV data
-            const rows = csvData.split('\n');
-            const headers = rows[0].split(',');
+    //     try {
+    //         // Find rows with matching image name
+    //         const matchingRows = data.filter((row) => row.image === imageName);
 
-            // Find the index of the 'image' column in the CSV file
-            const imageIndex = headers.findIndex((header) => header.trim() === 'image');
+    //         // Generate modal content or show a message
+    //         const modalContent = matchingRows.length > 0
+    //             ? matchingRows.map((row, index) => (
+    //                 <tr key={index}>
+    //                     <td>{row.image}</td>
+    //                     <td>{row.question}</td>
+    //                     <td>{row.answer}</td>
+    //                 </tr>
+    //             ))
+    //             : <tr><td colSpan="3">No suggestions available for this image.</td></tr>;
 
-            // Find rows with matching image name
-            const matchingRows = rows
-                .map((row) => row.split(','))
-                .filter((row) => row[imageIndex] === imageName);
+    //         setModalContent(modalContent);
 
-            // Generate modal content or show a message
-            const modalContent = matchingRows.length > 0
-                ? matchingRows.map((row, index) => (
-                    <div key={index}>
-                        <p><strong>Image:</strong> {row[0]}</p>
-                        <p><strong>Question:</strong> {row[1]}</p>
-                        <p><strong>Answer:</strong> {row[2]}</p>
-                        <hr />
-                    </div>
-                ))
-                : <p>No suggestions available for this image.</p>;
+    //         // Show the modal
+    //         const modal = new bootstrap.Modal(document.getElementById('example'));
+    //         modal.show();
+    //     } catch (error) {
+    //         console.error('Error fetching data:', error);
 
-            setModalContent(modalContent);
-
-            
-        } catch (error) {
-            console.error('Error fetching CSV data:', error);
-
-            toast.error('Failed to fetch suggestions', {
-                position: 'bottom-right',
-                autoClose: 1400,
-                hideProgressBar: false,
-                closeOnClick: true,
-                pauseOnHover: true,
-                draggable: true,
-                progress: undefined,
-                theme: 'light',
-            });
-        }
-    };
+    //         toast.error('Failed to fetch suggestions', {
+    //             position: 'bottom-right',
+    //             autoClose: 1400,
+    //             hideProgressBar: false,
+    //             closeOnClick: true,
+    //             pauseOnHover: true,
+    //             draggable: true,
+    //             progress: undefined,
+    //             theme: 'light',
+    //         });
+    //     }
+    // };
 
 
 
 
     return (
         <div className="container-fluid">
-            
+
 
             <div className="modal fade" id="example" aria-labelledby="exampleModalLabel">
                 <div className="modal-dialog modal-xl">
@@ -306,7 +314,7 @@ const Tester = () => {
                                         alt="Uploaded Image"
                                         className="hieght-and-width mx-2"
                                     />
-                                    <button className="btn btn-danger btn my-2 mx-3" type="button" onClick={fetchQuestions}>
+                                    <button className="btn btn-danger btn my-2 mx-3" type="button" data-bs-toggle="modal" data-bs-target="#example">
                                         Suggestions
                                     </button>
                                     <button className='btn btn-danger my-2 mx-3' onClick={handleClearImage}>clear</button>
