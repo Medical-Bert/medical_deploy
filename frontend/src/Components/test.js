@@ -16,7 +16,6 @@ const Tester = () => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
 
     const [uploadedImage, setUploadedImage] = useState(null);
-    const [imageName, setImageName] = useState(null);
     const [imgpath, setImgpath] = useState(null);
     const [value, setValue] = useState("");
     const textAreaRef = useRef(null);
@@ -45,6 +44,14 @@ const Tester = () => {
     };
 
 
+    const [modalContent, setModalContent] = useState([]);
+    const [data, setData] = useState([]);
+
+    useEffect(() => {
+        setData(jsonData);
+    }, []);
+    
+
 
 
 
@@ -63,7 +70,7 @@ const Tester = () => {
                 setImgpath(file.name);
 
 
-                const matchingRows = data.filter((row) => row.image === imageName);
+                const matchingRows = data.filter((row) => row.image === file.name);
 
                 // Generate modal content or show a message
                 const modalContent = matchingRows.length > 0
@@ -188,12 +195,7 @@ const Tester = () => {
         e.preventDefault();
         getans();
     };
-    const [modalContent, setModalContent] = useState([]);
-    const [data, setData] = useState([]);
-
-    useEffect(() => {
-        setData(jsonData.table.rows);
-    }, []);
+   
 
     // const fetchQuestions = () => {
     //     if (!imageName) {
@@ -314,7 +316,7 @@ const Tester = () => {
                                         alt="Uploaded Image"
                                         className="hieght-and-width mx-2"
                                     />
-                                    <button className="btn btn-danger btn my-2 mx-3" type="button" data-bs-toggle="modal" data-bs-target="#example">
+                                    <button className="btn btn-danger btn my-2 mx-3"  data-bs-toggle="modal" data-bs-target="#example">
                                         Suggestions
                                     </button>
                                     <button className='btn btn-danger my-2 mx-3' onClick={handleClearImage}>clear</button>
