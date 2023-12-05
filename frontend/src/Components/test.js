@@ -70,6 +70,7 @@ const Tester = () => {
 
 
                 const matchingRows = data.filter((row) => row.image === file.name);
+                console.log(matchingRows)
 
                 // Generate modal content or show a message
                 const modalContent = matchingRows.length > 0
