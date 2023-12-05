@@ -16,6 +16,7 @@ const Tester = () => {
     const [uploadedFiles, setUploadedFiles] = useState([]);
 
     const [uploadedImage, setUploadedImage] = useState(null);
+    const [imageName, setImageName] = useState(null);
     const [imgpath, setImgpath] = useState(null);
     const [value, setValue] = useState("");
     const textAreaRef = useRef(null);
@@ -46,7 +47,7 @@ const Tester = () => {
 
 
 
-    
+
 
     const handleImageUpload = async (e) => {
         const file = e.target.files[0];
@@ -56,6 +57,7 @@ const Tester = () => {
                 const formData = new FormData();
                 formData.append('file', file);
                 setImgFile(file)
+                setImageName(file.name);
 
                 setUploadedImage(URL.createObjectURL(file));
                 setImgpath(file.name);
@@ -171,10 +173,84 @@ const Tester = () => {
         getans();
     };
 
+    const fetchQuestions = async () => {
+        if (!imageName) {
+            return;
+        }
+
+        const csvFilePath = '../data/total.csv'; 
+
+        try {
+            // Fetch the CSV file
+            const response = await axios.get(csvFilePath);
+            const csvData = response.data;
+
+            // Parse CSV data
+            const rows = csvData.split('\n');
+            const headers = rows[0].split(',');
+
+            // Find the index of the 'image' column in the CSV file
+            const imageIndex = headers.findIndex((header) => header.trim() === 'image');
+
+            // Find rows with matching image name
+            const matchingRows = rows
+                .map((row) => row.split(','))
+                .filter((row) => row[imageIndex] === imageName);
+
+            // Generate modal content or show a message
+            const modalContent = matchingRows.length > 0
+                ? matchingRows.map((row, index) => (
+                    <div key={index}>
+                        <p><strong>Image:</strong> {row[0]}</p>
+                        <p><strong>Question:</strong> {row[1]}</p>
+                        <p><strong>Answer:</strong> {row[2]}</p>
+                        <hr />
+                    </div>
+                ))
+                : <p>No suggestions available for this image.</p>;
+
+            setModalContent(modalContent);
+
+            
+        } catch (error) {
+            console.error('Error fetching CSV data:', error);
+
+            toast.error('Failed to fetch suggestions', {
+                position: 'bottom-right',
+                autoClose: 1400,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: 'light',
+            });
+        }
+    };
+
+
 
 
     return (
         <div className="container-fluid">
+            
+
+            <div className="modal fade" id="example" aria-labelledby="exampleModalLabel">
+                <div className="modal-dialog modal-xl">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">
+                                Suggested questions
+                            </h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body d-flex justify-content-center">
+                            {modalContent}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <ToastContainer
                 position="bottom-right"
                 autoClose={800}
@@ -230,9 +306,10 @@ const Tester = () => {
                                         alt="Uploaded Image"
                                         className="hieght-and-width mx-2"
                                     />
-                                    
-
-                                    <button className='btn btn-danger my-2 mx-3'  onClick={handleClearImage}>clear</button>
+                                    <button className="btn btn-danger btn my-2 mx-3" type="button" onClick={fetchQuestions}>
+                                        Suggestions
+                                    </button>
+                                    <button className='btn btn-danger my-2 mx-3' onClick={handleClearImage}>clear</button>
                                 </div>
                             )}
                         </div>
