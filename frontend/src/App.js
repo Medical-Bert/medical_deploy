@@ -1,7 +1,7 @@
 import './App.css';
 import SignUp from './Components/signup';
 import LoginPage from './Components/login';
-import Tester from './Components/rester';
+import Tester from './Components/test';
 import Suggestion from './Components/sample';
 
 
