@@ -181,7 +181,7 @@ const Suggestion = () => {
         console.log(imgFile.name);
 
         try {
-            const response = await axios.post('http://localhost:5000/modeloutput', formData, {
+            const response = await axios.post('https://medicalbert-api.onrender.com/modeloutput', formData, {
                 withCredentials: true,
                 headers: {
                     'Content-Type': 'multipart/form-data', // Important for file uploads
@@ -243,7 +243,7 @@ const Suggestion = () => {
             }
     
             const imageName = imgFile.name.split('.').slice(0, -1).join('');
-            const response = await axios.post('http://localhost:5000/storeInfo',  {
+            const response = await axios.post('https://medicalbert-api.onrender.com/storeInfo',  {
                 params: {
                     userName: localStorage.getItem('loggeduser'),
                     imageData: imageName,
