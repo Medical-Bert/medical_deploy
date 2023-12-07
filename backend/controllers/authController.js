@@ -15,6 +15,74 @@ var otp1 = 1;
 
 
 
+const storeInfo = async (req, res) => {
+    try {
+        const { userName, imageData, qaPairs } = req.body.params;
+        
+        console.log(req.query)
+        console.log(req.body)
+        console.log(req.body.params)
+
+        if (!userName || !imageData || !qaPairs) {
+            // Check if required fields are missing
+            return res.status(400).json({ success: false, message: 'Missing required fields' });
+        }
+
+        // Find the user by userName
+        let user = await DatasaverModel.findOne({ userName: userName });
+
+        if (!user) {
+            // If the user does not exist, create a new entry for the user
+            user = new DatasaverModel({
+                userName: userName,
+                data: [{
+                    image: imageData,
+                    qaPairs: qaPairs,
+                }],
+            });
+
+            const result = await user.save();
+            console.log('Saved datasaver item:', result);
+
+            res.status(200).json({ success: true, message: 'Data saved successfully' });
+        } else {
+            // Find the existing datasaver item for the user and image
+            const existingDataSaver = await DatasaverModel.findOne({
+                _id: user._id,
+                'data.image': imageData, // Check for the image in the 'data' array
+            });
+
+            if (existingDataSaver) {
+                // Image exists, append the new question and answers
+                const existingImage = existingDataSaver.data.find(item => item.image === imageData);
+                existingImage.qaPairs.push(...qaPairs);
+
+                const result = await existingDataSaver.save();
+                console.log('Appended datasaver item:', result);
+
+                res.status(200).json({ success: true, message: 'Data appended successfully' });
+            } else {
+                // Image does not exist, create a new entry for the image
+                user.data.push({
+                    image: imageData,
+                    qaPairs: qaPairs,
+                });
+
+                const result = await user.save();
+                console.log('Saved datasaver item:', result);
+
+                res.status(200).json({ success: true, message: 'Data saved successfully' });
+            }
+        }
+    } catch (error) {
+        console.error('Error storing data:', error);
+        res.status(500).json({ success: false, message: 'Failed to store data' });
+    }
+};
+
+
+
+
 const generateToken = (user) => {
     return jwt.sign({ username: user.username }, 'secret_key is blash');
 };
