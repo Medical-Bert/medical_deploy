@@ -57,7 +57,7 @@ function App() {
         if (Cookies.get('jwt')) {
             const checkAuthenticationStatus = async () => {
                 try {
-                    const response = await axios.get('http://localhost:5000/profile', { withCredentials: true });
+                    const response = await axios.get('https://medicalbert-api.onrender.com/profile', { withCredentials: true });
                     const { username } = response.data;
                     
                     setLoggedIn(true);
