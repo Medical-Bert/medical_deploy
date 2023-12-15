@@ -80,7 +80,7 @@ function App() {
                     path="/"
                     element={
                         loggedIn ? (
-                            <Tester/>
+                            <Suggestion/>
                         ) : (
                             <Home />
                         )

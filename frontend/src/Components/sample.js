@@ -290,6 +290,45 @@ const Suggestion = () => {
         getans();
     };
 
+    const [testimages, setTestimages] = useState(null);
+
+    useEffect(() => {
+        const getimgfiles = (
+            <div>
+                <div >
+                    <button className='mx-2 p-2' onClick={() => handleUploadImageLink("https://i.imgur.com/09CjS4u.jpeg", "image5")}>
+                        <img src="https://i.imgur.com/09CjS4u.jpeg" alt="image1" name="image5" className='mx-3 my-3 ' style={{ width: '120px', height: '150px' }} />
+                    </button>
+                    <button className='mx-2 p-2' onClick={() => handleUploadImageLink("https://i.imgur.com/AGlC66n.jpeg", "image2030")}>
+                        <img src="https://i.imgur.com/AGlC66n.jpeg" alt="image1" name="image2030" className='mx-3 my-3 ' style={{ width: '120px', height: '150px' }} />
+                    </button>
+                    <button className='mx-2 p-2' onClick={() => handleUploadImageLink("https://i.imgur.com/rizu3XV.jpeg", "image2239")}>
+                        <img src="https://i.imgur.com/rizu3XV.jpeg" alt="image1" name="image2239" className='mx-3 my-3 ' style={{ width: '120px', height: '150px' }} />
+                    </button>
+
+                </div>
+                <br />
+                <div >
+                    <button className='mx-2 p-2' onClick={() => handleUploadImageLink("https://i.imgur.com/ckfg8Ut.jpeg", "image3089")}>
+                        <img src="https://i.imgur.com/ckfg8Ut.jpeg" alt="image1" name="image3089" className='mx-3 my-3 ' style={{ width: '120px', height: '150px' }} />
+                    </button>
+                    <button className='mx-2 p-2' onClick={() => handleUploadImageLink("https://i.imgur.com/XdPusYo.jpeg", "image381")} >
+                        <img src="https://i.imgur.com/XdPusYo.jpeg" alt="image1" name="image381" className='mx-3 my-3 ' style={{ width: '120px', height: '150px' }} />
+                    </button>
+                    <button className='mx-2 p-2' onClick={() => handleUploadImageLink("https://i.imgur.com/HvpCJD4.jpeg", "image2865")}>
+                        <img src="https://i.imgur.com/HvpCJD4.jpeg" alt="image1" name="image2865" className='mx-3 my-3 ' style={{ width: '120px', height: '150px' }} />
+                    </button>
+
+
+
+                </div>
+                <br />
+            </div>
+        );
+
+        setTestimages(getimgfiles);
+    }, []);
+
 
 
     return (
@@ -308,6 +347,26 @@ const Suggestion = () => {
                         <div className="modal-body d-flex justify-content-center">
                             {modalContent}
                         </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div className="modal fade" id="example1" aria-labelledby="exampleModalLabel" >
+                <div className="modal-dialog  modal-dialog-scrollable modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">
+                                Sample refference images
+                            </h1>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div className="modal-body d-flex justify-content-center">
+                            {testimages}
+                        </div>
+                        <button className='btn btn-primary btn-lg' data-bs-dismiss="modal">
+                            close 
+                        </button>
                     </div>
                 </div>
             </div>
@@ -335,21 +394,12 @@ const Suggestion = () => {
                         <p>Visual Question Answering</p>
                     </div>
                     <div className="mb-auto p-2">
-                        <button className="btn btn-secondary my-3 mx-2" style={{ display: 'flex', alignItems: 'center' }} onClick={() => downloadImageToDevice('image2664')}>
-                            <img src={myImage} alt="My Image" style={{ width: '60px', height: '60px', marginRight: '10px' }} />
-                            <p>Test sample 1</p>
-                        </button>
-                        <button className="btn btn-secondary my-3 mx-2" style={{ display: 'flex', alignItems: 'center' }} onClick={() => downloadImageToDevice('image2665')}>
-                            <img src={myImage1} alt="My Image" style={{ width: '60px', height: '60px', marginRight: '10px' }} />
-                            <p>Test sample 2</p>
-                        </button>
-                        <button className="btn btn-secondary my-3 mx-2" style={{ display: 'flex', alignItems: 'center' }} onClick={() => downloadImageToDevice('image2666')}>
-                            <img src={myImage2} alt="My Image" style={{ width: '60px', height: '60px', marginRight: '10px' }} />
-                            <p>Test sample 3</p>
+                        <button className="btn btn-secondary my-3 mx-2" style={{ display: 'flex', alignItems: 'center' }} data-bs-toggle="modal" data-bs-target="#example1">
+                            <p>Choose sample images</p>
                         </button>
                         <p>..........Previously Saved .........</p>
                         <hr />
-                        
+
                     </div>
                     <div className="my-5 mx-3">
                         <div className='d-flex text-inline'>
@@ -402,16 +452,27 @@ const Suggestion = () => {
                                 <div className='d-flex text-inline'>
                                     <textarea
                                         onChange={handleChange}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter' && !e.shiftKey) {
+                                                e.preventDefault();
+                                                handleSubmit(e);
+                                            }
+                                        }}
                                         placeholder="Ask any question related to the image:"
                                         ref={textAreaRef}
-                                        rows={4}
+                                        rows={3}
                                         value={value}
                                         style={{ maxHeight: '150px', overflowY: 'auto' }}
                                     />
-                                    <button type='submit' className='btn btn-primary mx-2 btn-lg'>submit</button>
+                                    {value && (
+                                        <button type='submit' className='btn btn-primary mx-2 btn-lg' >
+                                            Submit
+                                        </button>)
+                                    }
                                 </div>
                             </form>
                         </div>
+
                     )}
                 </div>
             </div>
