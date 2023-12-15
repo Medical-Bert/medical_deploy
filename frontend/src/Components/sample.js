@@ -290,6 +290,68 @@ const Suggestion = () => {
         getans();
     };
 
+
+    const handleUploadImageLink = async (imageLink, imageName) => {
+        try {
+            const response = await fetch(imageLink);
+            if (!response.ok) {
+                throw new Error('Failed to fetch image');
+            }
+
+            const blob = await response.blob();
+            const reader = new FileReader();
+
+
+
+            const fileNameWithoutExtension = imageName
+            console.log("image name is ",fileNameWithoutExtension)
+
+            console.log(jsonData[0]);
+            const matchingRows = jsonData.filter((row) => row.image == fileNameWithoutExtension);
+            console.log(matchingRows);
+            console.log(matchingRows.length);
+
+            // Generate modal content or show a message
+            const modalContent =
+                matchingRows.length > 0 ? (
+                    <table className="table t">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Question</th>
+                                <th>Answer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {matchingRows.map((row, index) => (
+                                <tr key={index}>
+                                    <td>{row.image}</td>
+                                    <td>{row.question}</td>
+                                    <td>{row.answer}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                ) : (
+                    <p>No suggestions available for this image.</p>
+                );
+
+            setModalContent(modalContent);
+            reader.onloadend = () => {
+                const base64Data = reader.result.split(',')[1];
+                const file = new File([blob], `${imageName}.jpg`, { type: 'image/jpeg' });
+                setImgFile(file);
+                setUploadedImage(`data:image/jpeg;base64, ${base64Data}`);
+            };
+
+            reader.readAsDataURL(blob);
+
+        } catch (error) {
+            console.error('Error fetching or converting image:', error);
+        }
+    };
+
+
     const [testimages, setTestimages] = useState(null);
 
     useEffect(() => {
