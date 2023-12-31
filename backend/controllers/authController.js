@@ -226,11 +226,12 @@ const modeloutput = async (req, res) => {
 
     const question = req.body.question;
     const flaskurl = req.body.flaskurl;
+    const model = req.body.model;
     console.log(flaskurl)
     const file = req.files.file;
     console.log(question);
     console.log(file);
-    const link='http://'+flaskurl+'/predict';
+    const link=`http://'+flaskurl+'/predict${model}`;
     console.log(link)
     try {
         // Read the file asynchronously as a Buffer
@@ -266,15 +267,17 @@ const modeloutput = async (req, res) => {
 };
 
 
-
 // const modeloutput = async (req, res) => {
 //     console.log(req.body);
 
 //     const question = req.body.question;
+//     const flaskurl = req.body.flaskurl;
+//     console.log(flaskurl)
 //     const file = req.files.file;
 //     console.log(question);
 //     console.log(file);
-
+//     const link='http://'+flaskurl+'/predict';
+//     console.log(link)
 //     try {
 //         // Read the file asynchronously as a Buffer
 //         const dataBuffer = await fs.readFile(file.path);
@@ -290,7 +293,7 @@ const modeloutput = async (req, res) => {
 //         };
 
 //         // Assuming axios is properly imported in your actual code
-//         const response = await axios.post('http://127.0.0.1:8000/predict', input_data, {
+//         const response = await axios.post(link, input_data, {
 //             headers: {
 //                 'Content-Type': 'application/json',
 //             },
@@ -307,6 +310,10 @@ const modeloutput = async (req, res) => {
 //         res.status(500).json({ error: error.message });
 //     }
 // };
+
+
+
+
 
 
 
