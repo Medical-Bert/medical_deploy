@@ -52,11 +52,12 @@ const LoginPage = () => {
                 // Handle successful login
                 console.log(response.data)
 
-                const { token, user } = response.data;
+                const { token } = response.data;
 
                 // Log the token to the console
                 console.log('Token is:', token);
-                console.log('user is:', user);
+                const { username } = response.data;
+                localStorage.setItem('loggeduser', username);
                 setToken(token)
                 localStorage.setItem('jwt', token);
 
