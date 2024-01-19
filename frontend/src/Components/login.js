@@ -50,7 +50,7 @@ const LoginPage = () => {
 
             if (response.data.status === 'success') {
                 // Handle successful login
-
+                console.log(response.data)
 
                 const { token, user } = response.data;
 
