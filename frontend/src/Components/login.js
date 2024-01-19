@@ -27,15 +27,15 @@ const LoginPage = () => {
                 },
                 withCredentials: true,
             });
-    
+
             console.log('Profile Data:', response.data);
-    
+
             navigate(`/test`);
         } catch (error) {
             console.error(error);
         }
     };
-    
+
 
     const handleFormSubmit = async (e) => {
         e.preventDefault();
@@ -54,10 +54,21 @@ const LoginPage = () => {
 
                 const { token } = response.data;
 
-                // Log the token to the console
-                console.log('Token is:', token);
-                const { username } = response.data;
-                localStorage.setItem('loggeduser', username);
+                axios.get('https://medicalbert-api.onrender.com/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                    },
+                    withCredentials: true,
+                })
+                    .then((response) => {
+                        const { username } = response.data;
+                        localStorage.setItem('loggeduser', username);
+                    })
+                    .catch((error) => {
+                        console.error(error);
+                    });
+
+
                 setToken(token)
                 localStorage.setItem('jwt', token);
 

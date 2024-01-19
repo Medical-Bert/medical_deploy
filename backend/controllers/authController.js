@@ -195,14 +195,14 @@ const login = async (req, res) => {
 const getProfile = (req, res) => {
     // Read the token from the Authorization header
     const authorizationHeader = req.headers.authorization;
-    
+
     if (authorizationHeader && authorizationHeader.startsWith('Bearer ')) {
-        const jwttoken = authorizationHeader.slice(7); // Remove 'Bearer ' from the token
+        const jwtToken = authorizationHeader.slice(7); // Remove 'Bearer ' from the token
         console.log("Token verification in progress");
-        console.log("Token is", jwttoken);
+        console.log("Token is", jwtToken);
 
         try {
-            const decoded = jwt.verify(jwttoken, 'secret_key is blash');
+            const decoded = jwt.verify(jwtToken, 'secret_key is blash');
             const { username } = decoded;
             res.json({ username });
         } catch (err) {
